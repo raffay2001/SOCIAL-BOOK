@@ -14,7 +14,8 @@ from .models import *
 def index(request):
     user_object = User.objects.get(username=request.user.username)
     user_profile_object = Profile.objects.get(user=user_object)
-    return render(request, 'index.html', {'user_profile': user_profile_object})
+    posts = Post.objects.all()
+    return render(request, 'index.html', {'user_profile': user_profile_object, 'posts': posts})
 
 # Controller for the signup page
 def signup(request):
