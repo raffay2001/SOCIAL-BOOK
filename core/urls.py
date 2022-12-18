@@ -17,5 +17,7 @@ urlpatterns = [
     # route for the profile page
     path('profile/<str:pk>/', views.profile, name='profile'),
     # route for following a user
-    path('follow', views.follow, name='follow')
+    path('follow', views.follow, name='follow'),
+    # route for searching a user
+    path('search', views.search, name='search')
 ]
