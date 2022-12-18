@@ -9,5 +9,7 @@ urlpatterns = [
     path('signin', views.signin, name='signin'),
     path('logout', views.logout, name='logout'),
     # account settings route
-    path('settings', views.settings, name='settings')
+    path('settings', views.settings, name='settings'),
+    # post uploading route
+    path('upload', views.upload, name='upload')
 ]
