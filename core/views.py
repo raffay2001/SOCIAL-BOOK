@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import messages
 from .models import *
+from itertools import chain
 
 # Create your views here.
 
@@ -14,8 +15,17 @@ from .models import *
 def index(request):
     user_object = User.objects.get(username=request.user.username)
     user_profile_object = Profile.objects.get(user=user_object)
+    user_following_list = []
+    feed = []
+    user_following = FollowersCount.objects.filter(follower=request.user.username)
+    for users in user_following:
+        user_following_list.append(users.user)
+    for usernames in user_following_list:
+        feed_lists = Post.objects.filter(user=usernames)
+        feed.append(feed_lists)
+    feed_list = list(chain(*feed))
     posts = Post.objects.all()
-    return render(request, 'index.html', {'user_profile': user_profile_object, 'posts': posts})
+    return render(request, 'index.html', {'user_profile': user_profile_object, 'posts': feed_list})
 
 # Controller for the signup page
 def signup(request):
