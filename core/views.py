@@ -117,3 +117,41 @@ def upload(request):
         new_post.save()
         return HttpResponseRedirect(reverse('index'))
     return HttpResponseRedirect(reverse('index'))
+
+# Controller for liking a particular post
+@login_required(login_url='signin')
+def like_post(request):
+    username = request.user.username
+    post_id = request.GET.get('post_id')
+
+    post = Post.objects.get(id=post_id)
+    like_filter = LikePost.objects.filter(post_id=post_id, username=username).first()
+
+    if like_filter is None:
+        new_like = LikePost.objects.create(post_id=post_id, username=username)
+        new_like.save()
+        post.no_of_likes += 1
+        post.save()
+        return HttpResponseRedirect(reverse('index'))
+    else:
+        like_filter.delete()
+        post.no_of_likes -= 1
+        post.save()
+        return HttpResponseRedirect(reverse('index'))
+
+
+# Controller for the user profile page
+@login_required(login_url='signin')
+def profile(request, pk):
+    user_obj = User.objects.get(username=pk)
+    user_profile = Profile.objects.get(user=user_obj)
+    user_posts = Post.objects.filter(user=pk)
+    user_post_length = len(user_posts)
+
+    context = {
+        'user_obj': user_obj,
+        'user_profile': user_profile,
+        'user_posts': user_posts,
+        'user_post_length': user_post_length
+    }
+    return render(request, 'profile.html', context=context)

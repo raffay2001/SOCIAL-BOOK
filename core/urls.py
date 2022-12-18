@@ -11,5 +11,9 @@ urlpatterns = [
     # account settings route
     path('settings', views.settings, name='settings'),
     # post uploading route
-    path('upload', views.upload, name='upload')
+    path('upload', views.upload, name='upload'),
+    # route for liking a post
+    path('like-post', views.like_post, name='like-post'),
+    # route for the profile page
+    path('profile/<str:pk>/', views.profile, name='profile')
 ]
