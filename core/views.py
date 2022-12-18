@@ -42,7 +42,7 @@ def signup(request):
 
                 # log user in and redirect to settings page
                 user_login = authenticate(username=username, password=password)
-                login(user_login)
+                login(request, user_login)
 
                 # create a profile object for the new user
                 user_model = User.objects.get(username=username)
@@ -139,7 +139,6 @@ def like_post(request):
         post.save()
         return HttpResponseRedirect(reverse('index'))
 
-
 # Controller for the user profile page
 @login_required(login_url='signin')
 def profile(request, pk):
@@ -147,11 +146,42 @@ def profile(request, pk):
     user_profile = Profile.objects.get(user=user_obj)
     user_posts = Post.objects.filter(user=pk)
     user_post_length = len(user_posts)
+    follower = request.user.username
+    user = pk
+
+    if FollowersCount.objects.filter(follower=follower, user=user).first():
+        button_text = 'Unfollow'
+    else:
+        button_text = 'Follow'
+    user_followers = FollowersCount.objects.filter(user=pk).count()
+    user_following = FollowersCount.objects.filter(follower=pk).count()
+
 
     context = {
         'user_obj': user_obj,
         'user_profile': user_profile,
         'user_posts': user_posts,
-        'user_post_length': user_post_length
+        'user_post_length': user_post_length,
+        'button_text': button_text,
+        'user_followers': user_followers,
+        'user_following': user_following
     }
     return render(request, 'profile.html', context=context)
+
+# Controller for following a user
+@login_required(login_url='signin')
+def follow(request):
+    if request.method == 'POST':
+        follower = request.POST['follower']
+        user = request.POST['user']
+
+        if FollowersCount.objects.filter(follower=follower, user=user).first():
+            delete_follower = FollowersCount.objects.get(follower=follower, user=user)
+            delete_follower.delete()
+            return HttpResponseRedirect(reverse('profile', args=[user]))
+        else:
+            new_follower = FollowersCount.objects.create(follower=follower, user=user)
+            new_follower.save()
+            return HttpResponseRedirect(reverse('profile', args=[user]))
+    else:
+        return HttpResponseRedirect(reverse('index'))
