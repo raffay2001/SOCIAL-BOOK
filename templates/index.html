@@ -16,6 +16,14 @@
     <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/tailwind.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        header{
+            background-color: rgb(24 24 27);
+        }
+        body{
+            background-color: rgb(24 24 27) !important;
+        }
+    </style>
 </head>
 
 <body>
@@ -46,7 +54,7 @@
                     <div class="right-side lg:pr-4">
                          <!-- upload -->
                         <a href="#"
-                            class="bg-pink-500 flex font-bold hidden hover:bg-pink-600 hover:text-white inline-block items-center lg:block max-h-10 mr-4 px-4 py-2 rounded shado text-white">
+                            class="bg-pink-500 flex font-bold hidden hover:bg-pink-600 hover:text-white inline-block items-center lg:block max-h-10 mr-4 px-4 py-2 rounded shado text-white" style="padding-bottom: 2.5rem;">
                             <ion-icon name="add-circle" class="-mb-1
                              mr-1 opacity-90 text-xl uilus-circle"></ion-icon> Upload Pics
                         </a>
@@ -195,7 +203,7 @@
 
                         <!-- post 1-->
                         {% for post in posts reversed %}
-                            <div class="bg-white shadow rounded-md  -mx-2 lg:mx-0">
+                            <div style="background-color: rgb(39 39 42);" class="text-white shadow rounded-md -mx-2 lg:mx-0">
 
                                 <!-- post header-->
                                 <div class="flex justify-between items-center px-4 py-3">
@@ -204,12 +212,12 @@
                                     </div>
                                 <div>
                                     <a href="#"> <i class="icon-feather-more-horizontal text-2xl hover:bg-gray-200 rounded-full p-2 transition -mr-1 "></i> </a>
-                                    <div class="bg-white w-56 shadow-md mx-auto p-2 mt-12 rounded-md text-gray-500 hidden text-base border border-gray-100  " uk-drop="mode: hover;pos: top-right">
+                                    <div style="background-color: rgb(39 39 42);" class="w-56 shadow-md mx-auto p-2 mt-12 rounded-md text-gray-500 hidden text-base" uk-drop="mode: hover;pos: bottom-right">
 
                                         <ul class="space-y-1">
                                         <li>
                                             <a href="#" class="flex items-center px-3 py-2 text-red-500 hover:bg-red-100 hover:text-red-500 rounded-md ">
-                                            <i class="uil-trash-alt mr-1"></i>  Delete
+                                            <i class="uil-trash-alt mr-1"></i>Delete
                                             </a>
                                         </li>
                                         </ul>
@@ -234,11 +242,11 @@
                                                     <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
                                                 </svg>
                                                 {% if post.no_of_likes == 0 %}
-                                                    <p>No Likes</p>
+                                                    <p class="text-white">No Likes</p>
                                                 {% elif post.no_of_likes == 1 %}
-                                                    <p>Liked by 1 person</p>
+                                                    <p class="text-white">Liked by 1 person</p>
                                                 {% else %}
-                                                    <p>Liked by {{post.no_of_likes}} people</p>
+                                                    <p class="text-white">Liked by {{post.no_of_likes}} people</p>
                                                 {% endif %}
                                             </div>
                                         </a>
@@ -308,65 +316,30 @@
                     <!-- right sidebar-->
                     <div class="lg:w-5/12">
 
-                        <div class="bg-white  shadow-md rounded-md overflow-hidden">
+                        <div style="background-color: rgb(39 39 42);" class="shadow-md rounded-md overflow-hidden">
 
-                            <div class="bg-gray-50  border-b border-gray-100 flex items-baseline justify-between py-4 px-6 ">
-                                <h2 class="font-semibold text-lg">Users You Can Follow</h2>
-                                <a href="#"> Refresh</a>
+                            <div style="background-color: rgb(39 39 42);" class="border-b border-gray-100 flex items-baseline justify-between py-4 px-6 ">
+                                <h2 class="font-semibold text-lg text-white">Users You Can Follow</h2>
+                                <a class="font-semibold text-lg text-white" href="#"> Refresh</a>
                             </div>
 
                             <div class="divide-gray-300 divide-gray-50 divide-opacity-50 divide-y px-4 ">
+
+                                {% for suggestion in suggestions_username_profile_list %}
                                 <div class="flex items-center justify-between py-3">
                                     <div class="flex flex-1 items-center space-x-4">
                                         <a href="profile.html">
-                                            <img src="{% static 'assets/images/avatars/avatar-2.jpg' %}" class="bg-gray-200 rounded-full w-10 h-10">
+                                            <img src="{{suggestion.profileimg.url}}" class="bg-gray-200 rounded-full w-10 h-10">
                                         </a>
                                         <div class="flex flex-col">
-                                            <span class="block capitalize font-semibold"> tomi_ml </span>
-                                            <span class="block capitalize text-sm"> 320k followers </span>
+                                            <span class="text-white block capitalize font-semibold"> {{suggestion.user}} </span>
+                                            <span class="text-white block capitalize text-sm"> {{suggestion.bio}} </span>
                                         </div>
                                     </div>
 
-                                    <a href="#" class="border border-gray-200 font-semibold px-4 py-1 rounded-full hover:bg-pink-600 hover:text-white hover:border-pink-600 "> Follow </a>
+                                    <a href="{% url 'profile' suggestion.user %}" class="text-white border border-gray-200 font-semibold px-4 py-1 rounded-full hover:bg-pink-600 hover:text-white hover:border-pink-600 "> View User </a>
                                 </div>
-                                <div class="flex items-center justify-between py-3">
-                                    <div class="flex flex-1 items-center space-x-4">
-                                        <a href="profile.html">
-                                            <img src="{% static 'assets/images/avatars/avatar-1.jpg' %}" class="bg-gray-200 rounded-full w-10 h-10">
-                                        </a>
-                                        <div class="flex flex-col">
-                                            <span class="block capitalize font-semibold"> taiye </span>
-                                            <span class="block capitalize text-sm"> New user </span>
-                                        </div>
-                                    </div>
-                                    <a href="#" class="border border-gray-200 font-semibold px-4 py-1 rounded-full hover:bg-pink-600 hover:text-white hover:border-pink-600 "> Follow </a>
-                                </div>
-                                <div class="flex items-center justify-between py-3">
-                                    <div class="flex flex-1 items-center space-x-4">
-                                        <a href="profile.html">
-                                            <img src="{% static 'assets/images/avatars/avatar-5.jpg' %}" class="bg-gray-200 rounded-full w-10 h-10">
-                                        </a>
-                                        <div class="flex flex-col">
-                                            <span class="block capitalize font-semibold"> kayode </span>
-                                            <span class="block capitalize text-sm"> 20.7k followers </span>
-                                        </div>
-                                    </div>
-                                    <a href="#" class="border border-gray-200 font-semibold px-4 py-1 rounded-full hover:bg-pink-600 hover:text-white hover:border-pink-600 "> Follow </a>
-                                </div>
-                                <div class="flex items-center justify-between py-3">
-                                    <div class="flex flex-1 items-center space-x-4">
-                                        <a href="profile.html">
-                                            <img src="{% static 'assets/images/avatars/avatar-7.jpg' %}" class="bg-gray-200 rounded-full w-10 h-10">
-                                        </a>
-                                        <div class="flex flex-col">
-                                            <span class="block capitalize font-semibold"> faith_do </span>
-                                            <span class="block capitalize text-sm"> 100.5k followers </span>
-                                        </div>
-                                    </div>
-
-                                    <a href="#" class="border border-gray-200 font-semibold px-4 py-1 rounded-full hover:bg-pink-600 hover:text-white hover:border-pink-600 "> Follow </a>
-                                </div>
-
+                                {% endfor %}
                             </div>
 
                         </div>
